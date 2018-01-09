@@ -7,9 +7,15 @@ export class ProductProvider {
 
   constructor(private dbProvider: DatabaseProvider) { }
 
-  public insert() {
+  public insert(product: Product) {
     return this.dbProvider.getDB()
-    .then()
+    .then((db:SQLiteObject) => {
+      let sql = "insert into products (name, price, duedate, active, category_id) values (?, ?, ?, ?, ?)";
+      let data = [product.name, product.price, product.duedate, product.active, product.category_id];
+
+      return db.executeSql(sql, data)
+      .catch((e) => console.error(e));
+    })
     .catch((e) => console.error(e));
 
   }
