@@ -12,13 +12,48 @@ export class EditProductPage {
   model: Product;
   categories: any[];
 
-//43:28
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private toast: ToastController,
+    private productProvider: ProductProvider,
+    private categoryProvider: CategoryProvider
+  ) {
+    this.model = new Product();
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+    if (this.navParams.data.id) {
+      this.productProvider.get(this.navParams.data.id)
+        .then((result: any) => {
+          this.model = result;
+        });
+    }
   }
 
   ionViewDidLoad() {
-
+    this.categoryProvider.getAll()
+      .then((result: any) => {
+        this.categories = result;
+      })
+      .catch(() => {
+        this.toast.create({ message: "Erro ao carregar as categorias.", duration: 3000, position: "botton" }).present();
+      });
   }
 
+  save() {
+    this.saveProduct()
+      .then(() => {
+        this.toast.create({ message: "Produto salvo com sucesso.", duration: 3000, position:"botton"}).present();
+      })
+      .catch(() => {
+        this.toast.create({ message: "Erro ao salvar o produto.", duration: 3000, position:"botton"}).present();
+      });
+  }
+
+  private saveProduct() {
+    if (this.model.id) {
+      return this.productProvider.update(this.model);
+    } else {
+      return this.productProvider.insert(this.model);
+    }
+  }
 }
