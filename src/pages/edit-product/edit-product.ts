@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the EditProductPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { ProductProvider, Product } from './../../providers/product/product';
+import { CategoryProvider } from './../../providers/category/category';
 
 @IonicPage()
 @Component({
@@ -14,12 +9,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'edit-product.html',
 })
 export class EditProductPage {
+  model: Product;
+  categories: any[];
+
+//43:28
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EditProductPage');
+
   }
 
 }

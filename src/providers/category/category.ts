@@ -1,17 +1,31 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SQLiteObject } from '@ionic-native/sqlite';
+import { DatabaseProvider } from '../database/database';
 
-/*
-  Generated class for the CategoryProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class CategoryProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello CategoryProvider Provider');
+  constructor(private dbProvider: DatabaseProvider) { }
+
+  public getAll() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = "select * from categories";
+
+        return db.executeSql(sql, [])
+          .then((data:any) => {
+            let categories: any[] = [];
+            if (data.rows.length > 0) {
+              for (let index = 0; index < data.rows.length; index++) {
+                var category = data.rows.item(index);
+                categories.push(category);
+              }
+            }
+            return categories;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
   }
 
 }
